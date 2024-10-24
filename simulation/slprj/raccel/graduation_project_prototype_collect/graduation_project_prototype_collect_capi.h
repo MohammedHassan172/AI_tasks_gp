@@ -1,0 +1,6 @@
+#ifndef RTW_HEADER_graduation_project_prototype_collect_capi_h_
+#define RTW_HEADER_graduation_project_prototype_collect_capi_h_
+#include "graduation_project_prototype_collect.h"
+extern void graduation_project_prototype_collect_InitializeDataMapInfo ( void
+) ;
+#endif
