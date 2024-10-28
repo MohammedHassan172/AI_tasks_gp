@@ -1,5 +1,0 @@
-#ifndef RTW_HEADER_graduation_project_prototype_collect_4_acc_types_h_
-#define RTW_HEADER_graduation_project_prototype_collect_4_acc_types_h_
-typedef struct P_graduation_project_prototype_collect_4_T_
-P_graduation_project_prototype_collect_4_T ;
-#endif
