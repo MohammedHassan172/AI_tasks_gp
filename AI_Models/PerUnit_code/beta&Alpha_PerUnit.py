@@ -7,11 +7,11 @@ import matplotlib.pyplot as plt
 import joblib  # For saving and loading the scaler
 
 # Load training data
-data = pd.read_csv('Training_data.csv')
+data = pd.read_csv('Training_data4_perunit.csv')
 
 # Prepare inputs and outputs
-x1 = data['Iq '].values
-x2 = data['Id '].values
+x1 = data['I beta magnitude'].values
+x2 = data['I alpha magnitude'].values
 
 y1 = data['Speed'].values
 y2 = data['Torque'].values
@@ -29,11 +29,11 @@ x_train = scaler.fit_transform(x_train)
 x_val = scaler.transform(x_val)
 
 # Save the scaler for future use
-joblib.dump(scaler, 'scaler__ID&IQ.pkl')
+joblib.dump(scaler, 'scaler_beta&alhpa_PerUnit.pkl')
 
 # Define the model with a deeper architecture and dropout
 model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(2,)),  # Specify input shape
     tf.keras.layers.Dense(32, activation='relu'),
     tf.keras.layers.Dense(2)  # Output layer for predicting Speed and Torque
 ])
@@ -50,13 +50,13 @@ early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=2
 history = model.fit(
     x_train, y_train,
     validation_data=(x_val, y_val),
-    epochs=2000,
+    epochs=1000,
     batch_size=16,
     callbacks=[early_stopping],  # Include early stopping
 )
 
 # Save the model
-model.save('speed_torque_model_ID&IQ.h5')
+model.save('speed_torque_model_beta_alpha.h5')
 
 # Plotting the learning curves
 plt.figure(figsize=(10, 6))
@@ -73,9 +73,9 @@ plt.show()
 # Function to get user input
 def get_user_input():
     try:
-        Iq = float(input("Enter Iq: "))
-        Id = float(input("Enter Id: "))
-        return np.array([[Iq, Id]])  # Return as a 2D array
+        beta = float(input("Enter I beta magnitude: "))
+        alpha = float(input("Enter I alpha magnitude: "))
+        return np.array([[beta, alpha]])  # Return as a 2D array
     except ValueError:
         print("Invalid input. Please enter numeric values.")
         return get_user_input()  # Retry on invalid input
@@ -96,6 +96,4 @@ try:
         print(f"Predicted Speed: {predictions[0][0]:.2f}, Predicted Torque: {predictions[0][1]:.2f}")
 
 except KeyboardInterrupt:
-    print("Testing loop stopped.")
-
     print("Testing loop stopped.")

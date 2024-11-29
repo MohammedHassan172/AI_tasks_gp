@@ -7,18 +7,17 @@ import matplotlib.pyplot as plt
 import joblib  # For saving and loading the scaler
 
 # Load training data
-data = pd.read_csv('Training_data.csv')
+data = pd.read_csv('Training_data4.csv')
 
 # Prepare inputs and outputs
-x1 = data['Ia magnitude'].values
-x2 = data['Ib magnitude'].values
-x3 = data['Ic magnitude'].values
+x1 = data['Iq '].values
+x2 = data['Id '].values
 
 y1 = data['Speed'].values
 y2 = data['Torque'].values
 
 # Combine inputs and outputs
-inputs = np.column_stack([x1, x2, x3])
+inputs = np.column_stack([x1, x2])
 outputs = np.column_stack([y1, y2])
 
 # Split into training and validation sets
@@ -30,7 +29,7 @@ x_train = scaler.fit_transform(x_train)
 x_val = scaler.transform(x_val)
 
 # Save the scaler for future use
-joblib.dump(scaler, 'scaler_ABC.pkl')
+joblib.dump(scaler, 'scaler__ID&IQ.pkl')
 
 # Define the model with a deeper architecture and dropout
 model = tf.keras.models.Sequential([
@@ -51,13 +50,13 @@ early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=2
 history = model.fit(
     x_train, y_train,
     validation_data=(x_val, y_val),
-    epochs=1000,
+    epochs=2000,
     batch_size=16,
     callbacks=[early_stopping],  # Include early stopping
 )
 
 # Save the model
-model.save('speed_torque_model_ABC.h5')
+model.save('speed_torque_model_ID&IQ.h5')
 
 # Plotting the learning curves
 plt.figure(figsize=(10, 6))
@@ -74,15 +73,12 @@ plt.show()
 # Function to get user input
 def get_user_input():
     try:
-        # Prompting user for input values
-        x1 = float(input("Enter Ia magnitude: "))
-        x2 = float(input("Enter Ib magnitude: "))
-        x3 = float(input("Enter Ic magnitude: "))
-        return np.array([[x1, x2, x3]])  # Return as a 2D array
+        Iq = float(input("Enter Iq: "))
+        Id = float(input("Enter Id: "))
+        return np.array([[Iq, Id]])  # Return as a 2D array
     except ValueError:
         print("Invalid input. Please enter numeric values.")
         return get_user_input()  # Retry on invalid input
-
 
 # Infinite testing loop
 try:
@@ -91,13 +87,15 @@ try:
         new_input = get_user_input()
 
         # Standardize the new input using the same scaler used during training
-        new_input_scaled = scaler.transform(new_input)  # Use transform instead of fit_transform
+        new_input_scaled = scaler.transform(new_input)
 
         # Make predictions
         predictions = model.predict(new_input_scaled)
 
         # Display the predictions
-        print(f"Predicted Speed: {predictions[0][0]}, Predicted Torque: {predictions[0][1]}")
+        print(f"Predicted Speed: {predictions[0][0]:.2f}, Predicted Torque: {predictions[0][1]:.2f}")
 
 except KeyboardInterrupt:
+    print("Testing loop stopped.")
+
     print("Testing loop stopped.")
