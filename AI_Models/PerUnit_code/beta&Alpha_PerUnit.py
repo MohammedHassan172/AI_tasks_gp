@@ -56,7 +56,7 @@ history = model.fit(
 )
 
 # Save the model
-model.save('speed_torque_model_beta_alpha.h5')
+model.save('speed_torque_model_beta_alpha_PerUnit.h5')
 
 # Plotting the learning curves
 plt.figure(figsize=(10, 6))
