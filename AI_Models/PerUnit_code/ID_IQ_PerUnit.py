@@ -58,7 +58,7 @@ history = model.fit(
 )
 
 # Save the model
-model.save('speed_torque_model_ID&IQ.h5')
+model.save('speed_torque_model_ID&IQ_PerUnit.h5')
 
 # Plotting the learning curves
 plt.figure(figsize=(10, 6))
